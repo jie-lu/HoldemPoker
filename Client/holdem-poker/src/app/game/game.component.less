@@ -1,0 +1,29 @@
+:host {
+    line-height: 1;
+    height: 100vh;
+    display: block;
+}
+
+.game-body {
+    height: calc(100% - 50px);
+    .player-row {
+        height: 16%;
+
+        app-player {
+            height: 100%;
+            width: 25%;
+        }
+    }
+
+    .card-row {
+        height: 16%;
+        app-playing-card {
+            transition: all 2s ease-in;
+        }
+    }
+
+    .event-container {
+        overflow: hidden auto;
+        font-size: 0.8rem;
+    }
+}

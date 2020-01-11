@@ -1,0 +1,38 @@
+<div *ngIf="player else emptyPlayer" class="d-flex flex-column h-100">
+    <div class="player-header" [ngClass]="{ 
+        'bg-warning':player.isCurrentPlayer, 
+        'bg-secondary':!player.isCurrentPlayer,
+        'text-light': !player.isCurrentPlayer }"
+        [ngbPopover]="actionPopoverTemplate" [autoClose]="false" triggers="manual"
+        #actionPopover="ngbPopover" container="body">
+        {{player.id}}&nbsp;
+        <app-count-down *ngIf="player.isCurrentPlayer && player.isConnected" [count]="player.countDown"></app-count-down>
+        <span *ngIf="!player.isConnected" class="badge badge-pill badge-danger">(offline)</span>
+    </div>
+    <div class="flex-grow-1 w-100 position-relative">
+        <app-playing-card *ngIf="player.cards[0]" [bigSymbolVisible]="false" 
+            style="bottom: 0.5em; left: 1em; transform-origin: bottom center; transform: rotate(-8deg);"
+            [card]="cardService.cardFromString(player.cards[0])"></app-playing-card>
+        <app-playing-card *ngIf="player.cards[1]" [bigSymbolVisible]="false"
+            style="bottom: 0.5em; left: 2em; transform-origin: bottom center; transform: rotate(8deg);"
+             [card]="cardService.cardFromString(player.cards[1])"></app-playing-card>
+    </div>
+    <div class="player-footer bg-secondary text-light">
+        {{player.chips}}
+        <span *ngIf="player.isDealer" class="badge badge-pill badge-primary">D</span>
+        <span *ngIf="player.isWinner" class="badge badge-primary">Winner</span>
+    </div>
+</div>
+
+<ng-template #actionPopoverTemplate>
+    <div class="player-action bg-primary text-light" *ngIf="isActionVisible">
+        {{ actionName }}:
+        <span class="badge badge-light" *ngIf="isActionAmountVisible">{{ actionAmount }}</span>
+    </div>
+</ng-template>
+
+<ng-template #emptyPlayer>
+    <div style="font-size: 5rem; margin:0; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:gray; opacity: 0.5;">
+    👤
+    </div>
+</ng-template>

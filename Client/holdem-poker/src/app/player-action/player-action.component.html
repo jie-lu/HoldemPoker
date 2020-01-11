@@ -1,0 +1,28 @@
+<div class="d-flex justify-content-center bg-light mt-5">
+    <button class="btn btn-secondary mr-2" [disabled]="!player.isCurrentPlayer"
+            (click)="fold()">Fold</button>
+    <button class="btn btn-primary mr-2" [disabled]="!player.isCurrentPlayer"
+        [ngbPopover]="raisePopover" [autoClose]="'outside'"
+        triggers="manual" #p="ngbPopover" (click)="toggleRaisePopover(p, game)">Raise</button>
+    <button *ngIf="game.maxBetAtThisStage === 0" class="btn btn-secondary" 
+            [disabled]="!player.isCurrentPlayer" (click)="check()">Check</button>
+    <button *ngIf="game.maxBetAtThisStage >0" class="btn btn-secondary" 
+            [disabled]="!player.isCurrentPlayer" (click)="call()">Call</button>
+</div>
+
+<ng-template #raisePopover>
+    <div class="input-group">
+        <div class="input-group-prepend">
+            <button class="btn btn-outline-secondary" (click)="decreaseBet()">-</button>
+        </div>
+        <input type="number" readonly [min]="playerBet.min" [max]="playerBet.max" [(ngModel)]="playerBet.value"
+            class="form-control" style="width: 5rem">
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" (click)="increaseBet()">+</button>
+        </div>
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="button"
+                    [disabled]="!player.isCurrentPlayer" (click)="bet(p)">OK</button>
+        </div>
+    </div>
+</ng-template>

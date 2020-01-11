@@ -1,0 +1,48 @@
+<div class="container bg-light p-1">
+    <span *ngIf="signalr.isConnected" class="badge badge-pill badge-success">Connected</span>
+    <span *ngIf="!signalr.isConnected" class="badge badge-pill badge-danger">disconnected</span>
+    <button type="button" class="btn btn-secondary" (click)="signalr.resetGame()">Reset Game</button>
+</div>
+<ng-container *ngIf="game">
+    <div class="game-body container">
+        <div class="d-flex bd-highlight justify-content-between align-items-start player-row">
+            <app-player [player]="game.players[3]" class="mt-4"></app-player>
+            <app-player [player]="game.players[4]" ></app-player>
+            <app-player [player]="game.players[5]" class="mt-4"></app-player>
+        </div>
+        <div class="d-flex bd-highlight justify-content-between align-items-start mt-5 player-row">
+            <app-player [player]="game.players[2]"></app-player>
+            <div class="w-50 h-100">
+                <div class="w-100 h-50 event-container" #eventContainer>
+                    <div #event *ngFor="let gameEvent of gameEvents; index as i"
+                        class="w-100 p-1" [ngClass]="{'bg-warning': i === gameEvents.length - 1}">
+                        {{gameEvent.eventMessage}}
+                    </div>
+                </div>
+                <div class="w-100 h-50" style="display:flex; align-items:center;justify-content:center;">
+                    <button *ngIf="signalr.isConnected && !game.isInProcess" (click)="startGame()"
+                        type="button" class="btn btn-primary">Start Game</button>
+                    <h6 *ngIf="game.isInProcess">Pot: {{ game.pot }}</h6>
+                </div>
+            </div>
+            <app-player [player]="game.players[6]"></app-player>
+        </div>
+        <div class="d-flex flex-flow justify-content-center p-4 bd-highlight card-row">
+            <app-playing-card *ngFor="let card of game?.sharedCards;" @inOutAnimation
+                [card]="cardService.cardFromString(card)">
+            </app-playing-card>
+        </div>
+        <div class="d-flex bd-highlight justify-content-between align-items-start player-row">
+            <app-player [player]="game.players[1]"></app-player>
+            <app-player [player]="game.players[0]" class="mt-4"></app-player>
+            <app-player [player]="game.players[7]"></app-player>
+        </div>
+        <app-player-action [player]="game.players[0]" [game]="game"></app-player-action>
+    </div>
+</ng-container>
+
+<textarea style="width: 100%; height: 400px">
+{{ signalr.gameState$ | async | json }}
+</textarea>
+
+
