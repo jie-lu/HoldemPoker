@@ -7,6 +7,7 @@ namespace HoldemPoker.UnitTests
 	public class BestHandCalculatorTests
 	{
 		BestHandCalculator _target = new BestHandCalculator();
+		PokerHandComparer _handComparer = new PokerHandComparer();
 
 		[Fact]
 		public void Detect_Straight()
@@ -126,6 +127,24 @@ namespace HoldemPoker.UnitTests
 			var bestHand = _target.CalculateBestHand(cards);
 
 			Assert.True(bestHand.Formation == PokerHand.FormationEnum.ThreeOfAKind);
+		}
+
+		[Fact]
+		public void CompareTwoHands()
+		{
+			var h1 = _target.CalculateBestHand(new List<PlayingCard>
+			{
+				"3d", "Ad", "9h", "Ac", "2d", "8s", "Kc"
+			});
+
+			var h2 = _target.CalculateBestHand(new List<PlayingCard>
+			{
+				"3d", "Ad", "9h", "Ac", "2d", "Js", "10h"
+			});
+
+			var result = _handComparer.Compare(h1, h2);
+
+			Assert.True(result > 0);
 		}
 	}
 }

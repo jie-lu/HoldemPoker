@@ -35,8 +35,8 @@ namespace HoldemPoker
 
 		private static int CompareRankGroups(PokerHand x, PokerHand y, int groupCount)
 		{
-			var xRankGroups = x.Cards.GroupBy(c => c.Rank).OrderByDescending(g => g.Count()).ThenBy(g => g.Key);
-			var yRankGroups = y.Cards.GroupBy(c => c.Rank).OrderByDescending(g => g.Count()).ThenBy(g => g.Key);
+			var xRankGroups = x.Cards.GroupBy(c => c.Rank).OrderByDescending(g => g.Count()).ThenByDescending(g => g.Key);
+			var yRankGroups = y.Cards.GroupBy(c => c.Rank).OrderByDescending(g => g.Count()).ThenByDescending(g => g.Key);
 			int diff = 0;
 			for (int i = 0; i < groupCount; i++)
 			{

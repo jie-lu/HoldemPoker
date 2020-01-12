@@ -1,1 +1,5 @@
 /Server/.vs
+/Server/HoldemPoker/obj
+/Server/HoldemPoker/bin
+/Server/HoldemPoker.UnitTests/bin
+/Server/HoldemPoker.UnitTests/obj

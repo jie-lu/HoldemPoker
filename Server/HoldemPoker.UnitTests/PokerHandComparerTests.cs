@@ -19,7 +19,7 @@ namespace HoldemPoker.UnitTests
 						new string[] { "2d", "3d", "5c", "7d", "10d" }, PokerHand.FormationEnum.HighCard, false)]
 		[InlineData(new string[] { "Ad", "Ac", "Kd", "Kc", "6d" }, PokerHand.FormationEnum.TwoPairs, false,
 						new string[] { "Ad", "Ad", "Ks", "Kh", "5d" }, PokerHand.FormationEnum.TwoPairs, false)]
-		[InlineData(new string[] { "Ks", "Kc", "10d", "4c", "6d" }, PokerHand.FormationEnum.Pair, false,
+		[InlineData(new string[] { "Ks", "Kc", "10d", "4c", "Qd" }, PokerHand.FormationEnum.Pair, false,
 						new string[] { "Kd", "Kh", "9c", "2h", "5d" }, PokerHand.FormationEnum.Pair, false)]
 		[InlineData(new string[] { "2d", "3d", "7d", "8d", "Jd" }, PokerHand.FormationEnum.Flush, false,
 						new string[] { "2c", "3c", "4c", "7c", "Jc" }, PokerHand.FormationEnum.Flush, false)]
