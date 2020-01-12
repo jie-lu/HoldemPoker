@@ -265,7 +265,7 @@ namespace HoldemPoker
 			var player = _players.Where(p => p.Id == playerId).FirstOrDefault();
 			if (player != null)
 			{
-				if (IsInprocess)
+				if (IsInprocess || Stage == StageEnum.End)
 				{
 					player.IsConnected = false;
 				}
@@ -465,8 +465,11 @@ namespace HoldemPoker
 		{
 			await SetCurrentPlayer(-1);
 
+			// Remove offline players
+			_players = _players.Where(p => p.IsConnected).ToList();
+
 			// Add the audience players to the table before start
-			Players.Concat(_audiencePlayers);
+			_players.Concat(_audiencePlayers);
 			_audiencePlayers.Clear();
 
 			// Reset the game state

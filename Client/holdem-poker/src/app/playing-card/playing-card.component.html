@@ -1,8 +1,9 @@
-<div [ngClass]="{red: card.suit === cardSuitEnum.Diamonds || card.suit === cardSuitEnum.Hearts,
-               black: card.suit === cardSuitEnum.Spades || card.suit === cardSuitEnum.Clubs}">
+<div [ngClass]="{ red: card.suit === cardSuitEnum.Diamonds || card.suit === cardSuitEnum.Hearts,
+                  black: card.suit === cardSuitEnum.Spades || card.suit === cardSuitEnum.Clubs }"
+     class="playing-card">
     <span class="float-left">{{ card.number }}</span>
-    <span class="float-left w-100">{{ card.suitSymbol }}</span>
-    <span *ngIf="bigSymbolVisible" class="float-right" style="font-size: 2rem; margin-left: -0.7rem; margin-top: -0.7rem;">
+    <span class="float-left w-100" class="small-symbol">{{ card.suitSymbol }}</span>
+    <span *ngIf="bigSymbolVisible" class="big-symbol float-right">
     {{ card.suitSymbol }}
     </span>
 </div>

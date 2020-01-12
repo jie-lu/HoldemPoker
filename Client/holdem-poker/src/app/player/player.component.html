@@ -1,23 +1,26 @@
-<div *ngIf="player else emptyPlayer" class="d-flex flex-column h-100">
+<div *ngIf="player else emptyPlayer" class="player d-flex flex-column h-100">
     <div class="player-header" [ngClass]="{ 
         'bg-warning':player.isCurrentPlayer, 
         'bg-secondary':!player.isCurrentPlayer,
         'text-light': !player.isCurrentPlayer }"
         [ngbPopover]="actionPopoverTemplate" [autoClose]="false" triggers="manual"
-        #actionPopover="ngbPopover" container="body">
-        {{player.id}}&nbsp;
-        <app-count-down *ngIf="player.isCurrentPlayer && player.isConnected" [count]="player.countDown"></app-count-down>
-        <span *ngIf="!player.isConnected" class="badge badge-pill badge-danger">(offline)</span>
+        #actionPopover="ngbPopover" popoverClass="player-action-popover">
+        <ngb-progressbar type="warning" [value]="countDown" [max]="player.countDown">
+            <span class="player-name">{{player.id}}</span>
+        </ngb-progressbar>
+        <!-- <div *ngIf="!player.isCurrentPlayer"> -->
+            <!-- {{player.id}}&nbsp; -->
+            <!-- <app-count-down *ngIf="player.isCurrentPlayer && player.isConnected" [count]="player.countDown"></app-count-down> -->
+            <!-- <span *ngIf="!player.isConnected" class="badge badge-pill badge-danger">(offline)</span> -->
+        <!-- </div> -->
     </div>
-    <div class="flex-grow-1 w-100 position-relative">
-        <app-playing-card *ngIf="player.cards[0]" [bigSymbolVisible]="false" 
-            style="bottom: 0.5em; left: 1em; transform-origin: bottom center; transform: rotate(-8deg);"
+    <div class="player-cards flex-grow-1 w-100 position-relative">
+        <app-playing-card *ngIf="player.cards[0]" [bigSymbolVisible]="false" @inOutAnimation
             [card]="cardService.cardFromString(player.cards[0])"></app-playing-card>
-        <app-playing-card *ngIf="player.cards[1]" [bigSymbolVisible]="false"
-            style="bottom: 0.5em; left: 2em; transform-origin: bottom center; transform: rotate(8deg);"
+        <app-playing-card *ngIf="player.cards[1]" [bigSymbolVisible]="false" @inOutAnimation
              [card]="cardService.cardFromString(player.cards[1])"></app-playing-card>
     </div>
-    <div class="player-footer bg-secondary text-light">
+    <div class="player-footer d-flex flex-row bg-secondary text-light">
         {{player.chips}}
         <span *ngIf="player.isDealer" class="badge badge-pill badge-primary">D</span>
         <span *ngIf="player.isWinner" class="badge badge-primary">Winner</span>
@@ -25,7 +28,7 @@
 </div>
 
 <ng-template #actionPopoverTemplate>
-    <div class="player-action bg-primary text-light" *ngIf="isActionVisible">
+    <div class="player-action bg-primary text-light" *ngIf="isActionVisible" @inOutAnimation>
         {{ actionName }}:
         <span class="badge badge-light" *ngIf="isActionAmountVisible">{{ actionAmount }}</span>
     </div>

@@ -26,8 +26,6 @@ namespace HoldemPoker
 		/// </summary>
 		public int[] Bets { get; private set; }
 
-		public bool HasChecked { get; set; }
-
 		public List<string> Cards { get; private set; }
 
 		public int CountDown { get; set; }

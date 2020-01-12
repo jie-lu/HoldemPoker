@@ -10,7 +10,7 @@ import { GameComponent } from './game/game.component';
 import { PlayerComponent } from './player/player.component';
 import { PlayingCardComponent } from './playing-card/playing-card.component';
 import { CountDownComponent } from './count-down/count-down.component';
-import { NgbPopoverModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPopoverModule, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
 import { PlayerActionComponent } from './player-action/player-action.component';
 
 @NgModule({
@@ -31,6 +31,7 @@ import { PlayerActionComponent } from './player-action/player-action.component';
     HttpClientModule,
     AppRoutingModule,
     NgbPopoverModule,
+    NgbProgressbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

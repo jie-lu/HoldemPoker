@@ -16,10 +16,10 @@ import { trigger, transition, style, animate, state } from '@angular/animations'
         state('in', style({ transform: 'translateY(0)', opacity: 1 })),
         transition('void => *', [
           style({ transform: 'translateY(100%)', opacity: 0 }),
-          animate('1s ease-in')
+          animate('0.5s ease-in')
         ]),
         transition('* => void', [
-          animate('1s ease-out', style({ transform: 'translateY(-100%)', opacity: 0 }))
+          animate('0.5s ease-out', style({ transform: 'translateY(-100%)', opacity: 0 }))
         ])
       ]
     )

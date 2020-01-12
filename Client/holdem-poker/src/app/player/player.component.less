@@ -2,6 +2,7 @@
     display: block;
     position: relative;
     background-color: whitesmoke;
+    min-height: 8rem;
 }
 
 .player-footer,
@@ -9,12 +10,52 @@
 .player-header {
     font-size: 75%;
     font-weight: bold;
-    padding: 0.5rem;
-    word-break: keep-all;
 }
 
-app-playing-card {
-    position: absolute;
-    height: 75%;
-    width: 50%;
+.player-header {
+    border: 0 solid;
+    border-top-left-radius: 0.5rem;
+    border-top-right-radius: 0.5rem;
+    padding: 0;
+
+    .player-name {
+        padding: 0.5rem;
+    }
+}
+
+.player-footer {
+    padding: 0.5rem;
+    border: 0 solid;
+    border-bottom-left-radius: 0.5rem;
+    border-bottom-right-radius: 0.5rem;
+}
+
+.player-action {
+    padding: 0.5rem;
+    min-width: 6rem;
+}
+
+.player-cards {
+    padding: 0.5rem;
+    app-playing-card {
+        position: absolute;
+        height: 75%;
+        width: 50%;
+        min-height: 4rem;
+        max-width: 3.5rem;
+    }
+
+    :nth-child(1) {
+        bottom: 0.2rem;
+        left: 1rem;
+        transform-origin: bottom center;
+        transform: rotate(-8deg);
+    }
+
+    :nth-child(2) {
+        bottom: 0.2rem;
+        left: 2rem;
+        transform-origin: bottom center;
+        transform: rotate(8deg);
+    }
 }

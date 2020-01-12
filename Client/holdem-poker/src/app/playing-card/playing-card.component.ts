@@ -4,7 +4,7 @@ import { PlayingCard, CardSuit } from '../models/playing-card';
 @Component({
   selector: 'app-playing-card',
   templateUrl: './playing-card.component.html',
-  styleUrls: ['./playing-card.component.less']
+  styleUrls: ['./playing-card.component.less'],
 })
 export class PlayingCardComponent implements OnInit {
 
