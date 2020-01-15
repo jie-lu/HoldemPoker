@@ -10,6 +10,7 @@ export class PlayingCardComponent implements OnInit {
 
   cardSuitEnum = CardSuit;
   @Input() bigSymbolVisible: boolean = true;
+  @Input() isBackVisible: boolean = false;
 
   constructor() { }
 

@@ -5,8 +5,9 @@
         'text-light': !player.isCurrentPlayer }"
         [ngbPopover]="actionPopoverTemplate" [autoClose]="false" triggers="manual"
         #actionPopover="ngbPopover" popoverClass="player-action-popover">
-        <ngb-progressbar type="warning" [value]="countDown" [max]="player.countDown">
-            <span class="player-name">{{player.id}}</span>
+        <ngb-progressbar [ngClass]="{'on': player.isCurrentPlayer, 'off': !player.isCurrentPlayer}"
+                         type="warning" [value]="countDown" [max]="player.countDown - 1">
+            <span class="player-name">{{player.id + (!player.isConnected ? '(off)' : '')}}</span>
         </ngb-progressbar>
         <!-- <div *ngIf="!player.isCurrentPlayer"> -->
             <!-- {{player.id}}&nbsp; -->
@@ -15,27 +16,27 @@
         <!-- </div> -->
     </div>
     <div class="player-cards flex-grow-1 w-100 position-relative">
-        <app-playing-card *ngIf="player.cards[0]" [bigSymbolVisible]="false" @inOutAnimation
+        <app-playing-card *ngIf="player.cards[0]" [isBackVisible]="!player.isHandVisible" [bigSymbolVisible]="false" @inOutAnimation
             [card]="cardService.cardFromString(player.cards[0])"></app-playing-card>
-        <app-playing-card *ngIf="player.cards[1]" [bigSymbolVisible]="false" @inOutAnimation
+        <app-playing-card *ngIf="player.cards[1]" [isBackVisible]="!player.isHandVisible" [bigSymbolVisible]="false" @inOutAnimation
              [card]="cardService.cardFromString(player.cards[1])"></app-playing-card>
     </div>
     <div class="player-footer d-flex flex-row bg-secondary text-light">
         {{player.chips}}
         <span *ngIf="player.isDealer" class="badge badge-pill badge-primary">D</span>
-        <span *ngIf="player.isWinner" class="badge badge-primary">Winner</span>
+        <span *ngIf="player.isWinner" class="badge badge-primary" @winnerAnimation>Winner</span>
     </div>
 </div>
 
 <ng-template #actionPopoverTemplate>
-    <div class="player-action bg-primary text-light" *ngIf="isActionVisible" @inOutAnimation>
-        {{ actionName }}:
-        <span class="badge badge-light" *ngIf="isActionAmountVisible">{{ actionAmount }}</span>
+    <div class="player-action bg-primary text-light" *ngIf="isActionVisible" @popoverAnimation>
+        {{ actionName }}
+        <span *ngIf="isActionAmountVisible">: {{ actionAmount }}</span>
     </div>
 </ng-template>
 
 <ng-template #emptyPlayer>
-    <div style="font-size: 5rem; margin:0; position:absolute; top:50%; left:50%; transform:translate(-50%, -50%); color:gray; opacity: 0.5;">
+    <div class="empty-player">
     👤
     </div>
 </ng-template>

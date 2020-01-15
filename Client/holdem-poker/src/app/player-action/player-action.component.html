@@ -25,4 +25,10 @@
                     [disabled]="!player.isCurrentPlayer" (click)="bet(p)">OK</button>
         </div>
     </div>
+    <div class="btn-group mt-1">
+        <button class="btn btn-secondary" (click)="increaseBetToOneTimePot()">x 1</button>
+        <button class="btn btn-secondary" type="button" (click)="increaseBetToOnePointFiveTimesPot()">x 1.5</button>
+        <button class="btn btn-secondary" type="button" (click)="increaseBetToTwoTimesPot()">x 2</button>
+        <button class="btn btn-secondary" type="button" (click)="increaseBetToAll()">All in</button>
+    </div>
 </ng-template>

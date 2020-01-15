@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, ViewChildren, ElementRef, Quer
 import { SignalRService } from '../services/signalr.service';
 import { map } from 'rxjs/operators';
 import { PlayingCardService } from '../services/playing-card.service';
-import { GameState, GameEvent } from '../models/game';
+import { GameState, GameEvent, GameStage } from '../models/game';
 import { AuthService } from '../services/auth.service';
 import { trigger, transition, style, animate, state } from '@angular/animations';
 
@@ -39,8 +39,7 @@ export class GameComponent implements OnInit, AfterViewChecked, OnDestroy {
     private authService: AuthService) { }
 
   processGameSate(state: GameState) {
-    state = Object.assign(new GameState(), state);
-    
+    let areYouAudience = true;
     let selfIndex = 0;
     let pot = 0;
     state.players.forEach((p, i) => {
@@ -56,12 +55,21 @@ export class GameComponent implements OnInit, AfterViewChecked, OnDestroy {
       p.isWinner = state.winnerIds.indexOf(p.id) >= 0;
       if(p.id == this.authService.getUser().name) {
         selfIndex = i;
+        p.isYou = true;
+        areYouAudience = false;
+      } else {
+        p.isYou = false;
       }
       pot += p.bets.reduce((prev, curr, stageIndex) => {
           if(stageIndex != state.stage) return prev + curr;
           else return prev;
         }, 0);
     });
+
+    // Determine if the hand is visible for each player
+    state.players.forEach(p => {
+      p.isHandVisible = areYouAudience || p.isYou || state.stage == GameStage.End;
+    })
 
     // Adjust the order of the players array
     if(selfIndex > 0) {

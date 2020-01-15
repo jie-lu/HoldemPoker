@@ -33,6 +33,7 @@ export class PlayerActionComponent implements OnInit, OnChanges {
     if (popover.isOpen()) {
       popover.close();
     } else {
+      this.updatePlayerBet();
       popover.open({ game });
     }
   }
@@ -47,6 +48,46 @@ export class PlayerActionComponent implements OnInit, OnChanges {
   increaseBet() {
     let change = Math.min(this.player.chips, this.game.blind);
     change = Math.min(change, this.player.chips);
+    this.playerBet.value += change;
+    this.player.chips -= change;
+  }
+
+  clearBet() {
+    this.player.chips += this.playerBet.value;
+    this.playerBet.value = 0;
+  }
+
+  increaseBetToOneTimePot() {
+    this.clearBet();
+
+    let change = Math.min(this.player.chips, this.game.pot);
+    this.playerBet.value += change;
+    this.player.chips -= change;
+  }
+
+  increaseBetToOnePointFiveTimesPot() {
+    this.clearBet();
+
+    let change = Math.floor(Math.min(this.player.chips, this.game.pot * 1.5));
+    change = change / this.game.blind * this.game.blind;
+    this.playerBet.value += change;
+    this.player.chips -= change;
+  }
+
+  increaseBetToTwoTimesPot() {
+    this.clearBet();
+
+    let change = Math.floor(Math.min(this.player.chips, this.game.pot * 2));
+    this.playerBet.value += change;
+    this.player.chips -= change;
+  }
+
+  increaseBetToAll() {
+    // Clear prevsiou bet
+    this.player.chips += this.playerBet.value;
+    this.playerBet.value = 0;
+
+    let change = this.player.chips;
     this.playerBet.value += change;
     this.player.chips -= change;
   }

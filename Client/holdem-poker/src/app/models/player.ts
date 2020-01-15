@@ -13,6 +13,8 @@ export interface Player {
     betInCurrentStage: number,
     hasFolded: boolean,
     lastActionInCurrentStage: GameEvent,
+    isYou: boolean,
+    isHandVisible: boolean,
 }
 
 export interface PlayerBet {

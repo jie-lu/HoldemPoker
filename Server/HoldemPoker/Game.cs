@@ -10,6 +10,8 @@ namespace HoldemPoker
 {
 	public class Game
 	{
+		public const int MaxNumberOfPlayers = 8;
+
 		public enum StageEnum
 		{
 			NotStarted = -1,
@@ -93,6 +95,7 @@ namespace HoldemPoker
 		{
 			var state = new GameState(gameEvent);
 			state.Players.AddRange(_players);
+			state.AudiencePlayers.AddRange(_audiencePlayers);
 			state.SharedCards.AddRange(_sharedCards);
 			state.CurrentPlayerIndex = CurrentPlayerIndex;
 			state.DealerIndex = DealerIndex;
@@ -235,6 +238,10 @@ namespace HoldemPoker
 			var player = _players.Where(p => p.Id == playerId).FirstOrDefault();
 			if (player != null)
 			{
+				if (player.IsConnected)
+				{
+					throw new InvalidOperationException($"The player name '{player.Id}' has been used. Please log in with another name.");
+				}
 				player.IsConnected = true;
 			}
 			else
@@ -248,7 +255,14 @@ namespace HoldemPoker
 				}
 				else
 				{
-					_players.Add(newPlayer);
+					if (_players.Count < MaxNumberOfPlayers)
+					{
+						_players.Add(newPlayer);
+					}
+					else
+					{
+						_audiencePlayers.Add(newPlayer);
+					}
 				}
 			}
 
@@ -461,16 +475,24 @@ namespace HoldemPoker
 			}
 		}
 
-		private async Task ResetBase()
+		private async Task ResetBase(bool clearLosers)
 		{
 			await SetCurrentPlayer(-1);
 
-			// Remove offline players
-			_players = _players.Where(p => p.IsConnected).ToList();
+			// Remove the player who is offline or lack of chips.
+			if (clearLosers)
+			{
+				_players = _players.Where(p => p.IsConnected && p.Chips > Blind).ToList();
+			}
+			else
+			{
+				_players = _players.Where(p => p.IsConnected).ToList();
+			}
 
 			// Add the audience players to the table before start
-			_players.Concat(_audiencePlayers);
-			_audiencePlayers.Clear();
+			var addedCount = MaxNumberOfPlayers - _audiencePlayers.Count;
+			_players.AddRange(_audiencePlayers.Take(addedCount));
+			_audiencePlayers.RemoveRange(0, Math.Min(_audiencePlayers.Count, addedCount));
 
 			// Reset the game state
 			_sharedCards.Clear();
@@ -488,7 +510,7 @@ namespace HoldemPoker
 
 		public async Task Reset(string playerId)
 		{
-			await ResetBase();
+			await ResetBase(false);
 
 			foreach (Player p in _players)
 			{
@@ -505,7 +527,12 @@ namespace HoldemPoker
 
 		public async Task Start(string playerId)
 		{
-			ResetBase();
+			ResetBase(true);
+			await PublishEvent(new GameEvent()
+			{
+				PlayerId = playerId,
+				EventType = GameEvent.EventTypeEnum.Reset
+			});
 
 			if (IsInprocess) 
 				throw new InvalidOperationException("Game cannot start when it's in process");

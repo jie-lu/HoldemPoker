@@ -6,6 +6,8 @@
 
 .game-body {
     height: calc(100% - 50px);
+    margin-top: 2rem;
+    z-index: 99;
     .player-row {
         height: 17%;
 
@@ -27,4 +29,19 @@
         overflow: hidden auto;
         font-size: 0.8rem;
     }
+}
+
+.game-header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: whitesmoke;
+}
+
+.game-footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 3rem;
+    background: whitesmoke;
 }

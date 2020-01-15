@@ -10,8 +10,9 @@ import { GameComponent } from './game/game.component';
 import { PlayerComponent } from './player/player.component';
 import { PlayingCardComponent } from './playing-card/playing-card.component';
 import { CountDownComponent } from './count-down/count-down.component';
-import { NgbPopoverModule, NgbProgressbarModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgbPopoverModule, NgbProgressbarModule, NgbDropdownModule, NgbToastModule } from '@ng-bootstrap/ng-bootstrap';
 import { PlayerActionComponent } from './player-action/player-action.component';
+import { ToastsContainerComponent } from './toasts-container/toasts-container.component';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,8 @@ import { PlayerActionComponent } from './player-action/player-action.component';
     PlayerComponent,
     PlayingCardComponent,
     CountDownComponent,
-    PlayerActionComponent
+    PlayerActionComponent,
+    ToastsContainerComponent
   ],
   imports: [
     BrowserModule,
@@ -32,6 +34,8 @@ import { PlayerActionComponent } from './player-action/player-action.component';
     AppRoutingModule,
     NgbPopoverModule,
     NgbProgressbarModule,
+    NgbDropdownModule,
+    NgbToastModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

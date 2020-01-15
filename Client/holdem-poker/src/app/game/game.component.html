@@ -1,7 +1,9 @@
-<div class="container bg-light p-1">
+<div class="game-header container bg-light p-1">
     <span *ngIf="signalr.isConnected" class="badge badge-pill badge-success">Connected</span>
-    <span *ngIf="!signalr.isConnected" class="badge badge-pill badge-danger">disconnected</span>
-    <button type="button" class="btn btn-secondary" (click)="signalr.resetGame()">Reset Game</button>
+    <span *ngIf="!signalr.isConnected" class="badge badge-pill badge-danger">Disconnected</span>
+    <span *ngFor="let audience of game?.audiencePlayers" class="badge badge-pill badge-secondary">
+        {{ audience.id }}
+    </span>
 </div>
 <ng-container *ngIf="game">
     <div class="game-body container">
@@ -38,6 +40,14 @@
             <app-player [player]="game.players[7]"></app-player>
         </div>
         <app-player-action [player]="game.players[0]" [game]="game"></app-player-action>
+    </div>
+    <div class="game-footer d-flex justify-content-center">
+        <div ngbDropdown placement="top-center" class="w-25">
+            <button class="btn btn-outline-primary w-100" id="dropdownBasic2" ngbDropdownToggle></button>
+            <div ngbDropdownMenu aria-labelledby="dropdownBasic2">
+              <button ngbDropdownItem (click)="signalr.resetGame()">Reset Game</button>
+            </div>
+          </div>
     </div>
 </ng-container>
 

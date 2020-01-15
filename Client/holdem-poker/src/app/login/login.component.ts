@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
+import { HelperService } from '../services/helper.service';
 
 @Component({
   selector: 'app-login',
@@ -15,7 +16,8 @@ export class LoginComponent implements OnInit {
   constructor(private fb: FormBuilder, 
                private authService: AuthService, 
                private router: Router,
-               private route: ActivatedRoute) {
+               private route: ActivatedRoute,
+               private helper: HelperService,) {
 
       this.form = this.fb.group({
         email: ['', Validators.required]
@@ -32,12 +34,9 @@ export class LoginComponent implements OnInit {
     const val = this.form.value;
 
     if (val.email) {
-      this.authService.login(val.email)
-        .subscribe(() => {
-          console.log("User is logged in");
-          this.router.navigateByUrl(this.returnUrl);
-        }
-      );
+      this.authService.login(val.email).toPromise()
+        .then(() => this.router.navigateByUrl(this.returnUrl))
+        .catch(error => this.helper.handleError(error));
     }
   }
 }

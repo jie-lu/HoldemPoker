@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using HoldemPoker.Hubs;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -21,11 +23,13 @@ namespace HoldemPoker.Controllers
 		private readonly IConfiguration _config;
 		private readonly SigningCredentials _signingCreds;
 		private readonly JwtSecurityTokenHandler _tokenHandler = new JwtSecurityTokenHandler();
+		private readonly Game _game;
 
-		public JwtTokenController(IConfiguration config)
+		public JwtTokenController(IConfiguration config, Game game)
 		{
 			if (config == null) throw new ArgumentNullException(nameof(config));
 
+			_game = game;
 			_config = config;
 			_signingCreds = new SigningCredentials(
 				new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"])),
@@ -42,6 +46,11 @@ namespace HoldemPoker.Controllers
 		public IActionResult Create([FromBody] LoginCredentials loginCreds)
 		{
 			if (loginCreds == null) return BadRequest();
+
+			if (_game.Players.Where(p => p.Id == loginCreds.UserName).Any())
+			{
+				return BadRequest($"The player name '{loginCreds.UserName}' has been used. Please use anther one.");
+			}
 
 			if (!ValidateLogin(loginCreds))
 			{

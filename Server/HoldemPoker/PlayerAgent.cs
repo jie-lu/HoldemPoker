@@ -14,15 +14,12 @@ namespace HoldemPoker
 	public class PlayerAgent : IDisposable
 	{
 		private readonly Game _game;
-		private IHubContext<GameHub, IGameClient> _gameHubContext;
 		private Timer _timer = new Timer();
 
 		public PlayerAgent(Game game, IHubContext<GameHub, IGameClient> gameHubContext)
 		{
 			_game = game;
 			_game.CurrentPlayerChanged += OnCurrentPlayerChanged;
-
-			_gameHubContext = gameHubContext;
 
 			_timer.Interval = game.PlayerTimeout * 1000;
 			_timer.AutoReset = false;

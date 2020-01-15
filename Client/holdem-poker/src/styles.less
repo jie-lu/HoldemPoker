@@ -15,9 +15,24 @@
 
 .player-header {
     ngb-progressbar {
-        .progress{
+        &.on {
+            .progress {
+                background: #886600;
+            }
+        }
+        &.off {
+            .progress {
+                div.progress-bar {
+                    background: #6c757d!important;
+                }
+            }
+        }
+        .progress {
             height:auto;
             background: #6c757d;
+
+            
+
             div.progress-bar {
                 overflow: visible;
             }

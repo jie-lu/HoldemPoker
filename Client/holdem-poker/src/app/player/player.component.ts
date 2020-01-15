@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild, AfterViewInit } from '@angular/core';
 import { Player } from '../models/player';
 import { PlayingCardService } from '../services/playing-card.service';
 import { GameEventType } from '../models/game';
@@ -35,6 +35,18 @@ import { take } from 'rxjs/operators';
           animate('0.5s ease-out', style({ transform: 'scale(0)'}))
         ])
       ]
+    ),
+    trigger(
+      'winnerAnimation', [
+        state('in', style({ transform: 'scale(1)', opacity: 1 })),
+        transition('void => *', [
+          style({ transform: 'scale(10)', opacity: 0.5 }),
+          animate('1s steps(5, end)')
+        ]),
+        // transition('* => void', [
+        //   animate('1s ease-out', style({ transform: 'scale(5)', opacity: 0 }))
+        // ])
+      ]
     )
   ]
 })
@@ -61,7 +73,10 @@ export class PlayerComponent implements OnInit, OnChanges {
       this.updateAction();
     }
 
+    this.updateCountDown(changes);
+  }
 
+  private updateCountDown(changes: SimpleChanges) {
     if((changes.player.currentValue != null && changes.player.previousValue == null) ||
        (changes.player.currentValue && changes.player.previousValue
         && changes.player.currentValue.isCurrentPlayer != changes.player.previousValue.isCurrentPlayer)
@@ -71,13 +86,12 @@ export class PlayerComponent implements OnInit, OnChanges {
           take(changes.player.currentValue.countDown));
         this.countDownSub = this.countDown$.subscribe((i) => {
           this.countDown = i;
-          console.log(i)
         });
-        console.log('player ' + changes.player.currentValue.id + ' ' + changes.player.currentValue.isCurrentPlayer);
+        //console.log('player ' + changes.player.currentValue.id + ' ' + changes.player.currentValue.isCurrentPlayer);
       } else {
         if(this.countDownSub) this.countDownSub.unsubscribe();
-        this.countDown = 0;
-        console.log('player ' + changes.player.currentValue.id + ' ' + changes.player.currentValue.isCurrentPlayer);
+        this.countDown = this.player.countDown;
+        //console.log('player ' + changes.player.currentValue.id + ' ' + changes.player.currentValue.isCurrentPlayer);
       }
     }
   }
@@ -87,7 +101,10 @@ export class PlayerComponent implements OnInit, OnChanges {
       || (!this.player.lastActionInCurrentStage && this.player.betInCurrentStage > 0);
     
     if(this.isActionVisible) {
-      if(this.actionPopover) this.actionPopover.open();
+      setTimeout(() => {
+        if(this.actionPopover) this.actionPopover.open();
+      }, 0);
+      
       if(this.player.hasFolded) {
         this.actionName = 'Fold';
         this.isActionAmountVisible = false;

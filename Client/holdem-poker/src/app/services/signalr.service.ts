@@ -6,6 +6,7 @@ import { GameState, GameStage } from '../models/game';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 import { User } from '../models/user';
+import { HelperService } from './helper.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,8 @@ export class SignalRService {
   public gameState$ = this.gameStateSource.asObservable();
 
   constructor(private authService: AuthService,
-    private router: Router) {
+    private router: Router,
+    private helper: HelperService) {
     this.signalrUrl = environment.signalrUrl;
     this.authService.userChanges.subscribe((user) => this.setupConnection(user));
   }
@@ -31,7 +33,7 @@ export class SignalRService {
     
     this.connection.onclose(error => {
       this.isConnected = false;
-      console.log('disconnected from server');
+      this.helper.handleError(error);
     });
 
     this.connection.on('update', gameState => {
@@ -49,6 +51,8 @@ export class SignalRService {
       .catch(error => {
         if(error && error.statusCode === 401) {
           this.router.navigate(['login']);
+        } else {
+          this.helper.handleError(error);
         }
       });
   }
@@ -63,7 +67,7 @@ export class SignalRService {
       console.log('game started');
     })
     .catch(err => {
-      console.log(err);
+      this.helper.handleError(err);
     });
   }
 
@@ -73,7 +77,7 @@ export class SignalRService {
       console.log('game has been reset');
     })
     .catch(err => {
-      console.log(err);
+      this.helper.handleError(err);
     });
   }
 
@@ -83,7 +87,7 @@ export class SignalRService {
       console.log('Fold');
     })
     .catch(err => {
-      console.log(err); 
+      this.helper.handleError(err);
     });
   }
 
@@ -93,7 +97,7 @@ export class SignalRService {
       console.log('Check');
     })
     .catch(err => {
-      console.log(err); 
+      this.helper.handleError(err);
     });
   }
 
@@ -103,7 +107,7 @@ export class SignalRService {
       console.log('Call');
     })
     .catch(err => {
-      console.log(err); 
+      this.helper.handleError(err);
     });
   }
 
@@ -113,7 +117,7 @@ export class SignalRService {
       console.log('Bet');
     })
     .catch(err => {
-      console.log(err); 
+      this.helper.handleError(err);
     });
   }
 }

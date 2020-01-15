@@ -8,6 +8,7 @@ namespace HoldemPoker
 	public class GameState
 	{
 		public List<Player> Players { get; set; }
+		public List<Player> AudiencePlayers { get; set; }
 		public int DealerIndex { get; set; }
 		public int CurrentPlayerIndex { get; set; }
 		public List<string> SharedCards { get; set; }
@@ -21,6 +22,7 @@ namespace HoldemPoker
 		{
 			GameEvent = gameEvent;
 			Players = new List<Player>();
+			AudiencePlayers = new List<Player>();
 			SharedCards = new List<string>();
 			WinnerIds = new List<string>();
 		}

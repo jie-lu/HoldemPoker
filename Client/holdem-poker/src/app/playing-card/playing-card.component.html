@@ -1,4 +1,4 @@
-<div [ngClass]="{ red: card.suit === cardSuitEnum.Diamonds || card.suit === cardSuitEnum.Hearts,
+<div *ngIf="!isBackVisible"[ngClass]="{ red: card.suit === cardSuitEnum.Diamonds || card.suit === cardSuitEnum.Hearts,
                   black: card.suit === cardSuitEnum.Spades || card.suit === cardSuitEnum.Clubs }"
      class="playing-card">
     <span class="float-left">{{ card.number }}</span>
@@ -7,4 +7,5 @@
     {{ card.suitSymbol }}
     </span>
 </div>
-<!-- <span style="font-size:5rem; text-align:center; vertical-align:middle; color:red">🃚</span> -->
+<div *ngIf="isBackVisible" class="card-back">
+</div>

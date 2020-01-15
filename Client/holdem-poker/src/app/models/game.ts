@@ -90,6 +90,7 @@ export class GameEvent {
 
 export class GameState {
     players: Player[];
+    audiencePlayers: Player[];
     dealerIndex: number;
     currentPlayerIndex: number;
     sharedCards: PlayingCard[];
