@@ -3,3 +3,4 @@
 /Server/HoldemPoker/bin
 /Server/HoldemPoker.UnitTests/bin
 /Server/HoldemPoker.UnitTests/obj
+/Server/HoldemPoker/web.config

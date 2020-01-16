@@ -3,15 +3,34 @@ import { AuthService } from '../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 import { HelperService } from '../services/helper.service';
+import { Subject, interval, Observable } from 'rxjs';
+import { take, map, tap } from 'rxjs/operators';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.less']
+  styleUrls: ['./login.component.less'],
+  animations: [
+    trigger(
+      'inOutAnimation', [
+        state('in', style({ transform: 'translateX(0) rotate(0)'})),
+        transition('void => *', [
+          style({ transform: 'translateX(100%) rotate(360deg)'}),
+          animate('0.5s ease-in')
+        ]),
+        transition('* => void', [
+          animate('0.5s ease-out', style({ transform: 'translateX(-100%)'}))
+        ])
+      ]
+    )
+  ]
 })
 export class LoginComponent implements OnInit {
-  public form: FormGroup;
   private returnUrl: string;
+  form: FormGroup;
+  titleStream: Observable<string[]>;
+  titleWords: string[] = [];
 
   constructor(private fb: FormBuilder, 
                private authService: AuthService, 
@@ -28,6 +47,24 @@ export class LoginComponent implements OnInit {
     this.route.queryParams.subscribe(
       params => this.returnUrl = params['return'] || '/game'
     );
+
+    interval(500).pipe(
+      take(3),
+      tap(i => {
+        console.log(i);
+        switch(i) {
+          case 0:
+            this.titleWords.push('Texas ');
+            break;
+          case 1:
+            this.titleWords.push('H♦ld\'em ');
+            break;
+          case 2:
+            this.titleWords.push('环贸内测版');
+            break;
+        }
+      })
+    ).subscribe();
   }
 
   login() {

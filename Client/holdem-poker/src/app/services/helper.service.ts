@@ -12,7 +12,11 @@ export class HelperService {
   public handleError(error) {
     console.log(error);
     if(error instanceof HttpErrorResponse) {
-      this.toastService.show(error.error);
+      if(typeof error.error === 'string') {
+        this.toastService.show(error.error);
+      } else {
+        this.toastService.show(error.message);
+      }
     } else {
       this.toastService.show(error);
     }
