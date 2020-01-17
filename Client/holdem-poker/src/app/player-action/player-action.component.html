@@ -2,7 +2,7 @@
     <button class="btn btn-secondary mr-2" [disabled]="!player.isCurrentPlayer"
             (click)="fold()">Fold</button>
     <button class="btn btn-primary mr-2" [disabled]="!player.isCurrentPlayer"
-        [ngbPopover]="raisePopover" [autoClose]="'outside'"
+        [ngbPopover]="raisePopover" [autoClose]="'outside'" (hidden)="onPopoverClosed()"
         triggers="manual" #p="ngbPopover" (click)="toggleRaisePopover(p, game)">Raise</button>
     <button *ngIf="game.maxBetAtThisStage === 0" class="btn btn-secondary" 
             [disabled]="!player.isCurrentPlayer" (click)="check()">Check</button>

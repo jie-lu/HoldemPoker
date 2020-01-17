@@ -24,9 +24,6 @@ export class PlayerActionComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if(changes.game && changes.game.currentValue) {
-      this.updatePlayerBet();
-    }
   }
 
   toggleRaisePopover(popover, game: GameState) {
@@ -35,6 +32,13 @@ export class PlayerActionComponent implements OnInit, OnChanges {
     } else {
       this.updatePlayerBet();
       popover.open({ game });
+    }
+  }
+
+  onPopoverClosed() {
+    console.log('popover closed');
+    if(this.player.isCurrentPlayer) {
+      this.clearBet();
     }
   }
 
@@ -58,35 +62,28 @@ export class PlayerActionComponent implements OnInit, OnChanges {
   }
 
   increaseBetToOneTimePot() {
-    this.clearBet();
-
-    let change = Math.min(this.player.chips, this.game.pot);
+    const pot = Math.max(this.game.pot, this.game.blind);
+    let change = Math.min(this.player.chips, pot);
     this.playerBet.value += change;
     this.player.chips -= change;
   }
 
   increaseBetToOnePointFiveTimesPot() {
-    this.clearBet();
-
-    let change = Math.floor(Math.min(this.player.chips, this.game.pot * 1.5));
+    const pot = Math.max(this.game.pot, this.game.blind);
+    let change = Math.floor(Math.min(this.player.chips, pot * 1.5));
     change = change / this.game.blind * this.game.blind;
     this.playerBet.value += change;
     this.player.chips -= change;
   }
 
   increaseBetToTwoTimesPot() {
-    this.clearBet();
-
-    let change = Math.floor(Math.min(this.player.chips, this.game.pot * 2));
+    const pot = Math.max(this.game.pot, this.game.blind);
+    let change = Math.floor(Math.min(this.player.chips, pot * 2));
     this.playerBet.value += change;
     this.player.chips -= change;
   }
 
   increaseBetToAll() {
-    // Clear prevsiou bet
-    this.player.chips += this.playerBet.value;
-    this.playerBet.value = 0;
-
     let change = this.player.chips;
     this.playerBet.value += change;
     this.player.chips -= change;
@@ -95,10 +92,11 @@ export class PlayerActionComponent implements OnInit, OnChanges {
   updatePlayerBet() {
     if(this.game && this.game.isInProcess) {
       this.playerBet = {
-        value: Math.min(this.player.chips, this.game.maxBetAtThisStage),
+        value: Math.min(this.player.chips, this.game.maxBetAtThisStage - this.player.betInCurrentStage),
         min: Math.min(this.player.chips, this.game.maxBetAtThisStage),
         max: Math.max(this.player.chips, this.game.maxBetAtThisStage)
       }
+      this.player.chips -= this.playerBet.value;
     }
   }
 
